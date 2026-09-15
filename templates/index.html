@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyPilot AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="brand">
+        <div class="brand-icon">📚</div>
+        <div>
+            <h1>StudyPilot AI</h1>
+            <p>Your peaceful study companion</p>
+        </div>
+    </div>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        AI Study Assistant
+    </div>
+</header>
+
+<main>
+
+<section class="hero">
+    <div class="hero-sticker">🌿 ✨ 📖</div>
+
+    <p class="welcome">WELCOME TO STUDYPILOT</p>
+
+    <h2>Learn smarter.<br>Understand with confidence.</h2>
+
+    <p class="hero-text">
+        Your peaceful AI-powered study companion for explanations,
+        notes, quizzes, answers, study plans and smart timetables.
+    </p>
+</section>
+
+
+<section class="tools-section">
+
+    <div class="section-heading">
+        <h3>What do you want to study today?</h3>
+        <p>Choose a study mode and let StudyPilot help you.</p>
+    </div>
+
+    <div class="tools-grid">
+
+        <button class="tool-card active" data-tool="explain">
+            <span class="tool-icon">💡</span>
+            <span class="tool-title">Explain Topic</span>
+            <span class="tool-description">
+                Understand difficult concepts simply.
+            </span>
+        </button>
+
+        <button class="tool-card" data-tool="summarize">
+            <span class="tool-icon">📝</span>
+            <span class="tool-title">Summarize Notes</span>
+            <span class="tool-description">
+                Turn long notes into quick revision material.
+            </span>
+        </button>
+
+        <button class="tool-card" data-tool="quiz">
+            <span class="tool-icon">🧠</span>
+            <span class="tool-title">Generate Quiz</span>
+            <span class="tool-description">
+                Practice with AI-generated questions.
+            </span>
+        </button>
+
+        <button class="tool-card" data-tool="improve">
+            <span class="tool-icon">✍️</span>
+            <span class="tool-title">Improve Answer</span>
+            <span class="tool-description">
+                Make your academic answers clearer.
+            </span>
+        </button>
+
+        <button class="tool-card" data-tool="plan">
+            <span class="tool-icon">🌱</span>
+            <span class="tool-title">Study Plan</span>
+            <span class="tool-description">
+                Get a practical step-by-step learning plan.
+            </span>
+        </button>
+
+        <button class="tool-card" data-tool="timetable">
+            <span class="tool-icon">🗓️</span>
+            <span class="tool-title">Smart Timetable</span>
+            <span class="tool-description">
+                Build a timetable with priority topics and practice questions.
+            </span>
+        </button>
+
+    </div>
+</section>
+
+
+<section class="workspace">
+
+    <div class="workspace-header">
+        <div>
+            <p class="workspace-label">STUDY WORKSPACE</p>
+            <h3 id="workspaceTitle">Explain a Topic</h3>
+
+            <p id="workspaceDescription">
+                Enter a topic or question you want to understand.
+            </p>
+        </div>
+
+        <div class="peace-icon">🌙</div>
+    </div>
+
+
+    <div id="timetableOptions" class="timetable-options hidden">
+
+        <div class="small-input">
+            <label for="studyHours">Hours available per day</label>
+
+            <input
+                type="number"
+                id="studyHours"
+                min="0.5"
+                max="12"
+                step="0.5"
+                value="2">
+        </div>
+
+        <div class="small-input">
+            <label for="studyDays">Number of days</label>
+
+            <input
+                type="number"
+                id="studyDays"
+                min="1"
+                max="30"
+                value="3">
+        </div>
+
+    </div>
+
+
+    <div class="input-box">
+
+        <label for="userInput">Your study content</label>
+
+        <textarea
+            id="userInput"
+            maxlength="6000"
+            placeholder="Example: Explain DBMS and its important topics in simple English..."></textarea>
+
+        <div class="input-footer">
+            <span id="characterCount">0 / 6000</span>
+            <span>🌿 Study peacefully</span>
+        </div>
+
+    </div>
+
+
+    <button id="generateBtn" class="generate-button">
+        <span id="buttonIcon">✨</span>
+        <span id="buttonText">Generate Explanation</span>
+    </button>
+
+
+    <div id="errorBox" class="error-box hidden"></div>
+
+
+    <div id="loadingBox" class="loading-box hidden">
+        <div class="loader"></div>
+
+        <div>
+            <strong>StudyPilot is thinking...</strong>
+            <p>Preparing something useful for your study session.</p>
+        </div>
+    </div>
+
+
+    <div id="outputSection" class="output-section hidden">
+
+        <div class="output-header">
+
+            <div>
+                <p class="workspace-label">AI RESULT</p>
+                <h3>StudyPilot's Answer</h3>
+            </div>
+
+            <button id="copyBtn" class="copy-button">
+                📋 Copy
+            </button>
+
+        </div>
+
+        <div id="output" class="output-content"></div>
+
+    </div>
+
+</section>
+
+
+<footer>
+    <div>📚 StudyPilot AI</div>
+    <p>Learn • Practice • Revise • Improve</p>
+</footer>
+
+</main>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
