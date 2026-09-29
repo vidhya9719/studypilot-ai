@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
 from pypdf import PdfReader
 
-import ollama
+from google import genai
+import os
 import re
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -20,8 +21,27 @@ app = Flask(__name__)
 # Maximum PDF upload size = 15 MB
 app.config["MAX_CONTENT_LENGTH"] = 15 * 1024 * 1024
 
-# Local Ollama model
-MODEL = "llama3.2:3b"
+
+# ============================================================
+# GEMINI CONFIGURATION
+# ============================================================
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    print("WARNING: GEMINI_API_KEY was not found in .env")
+
+client = genai.Client(
+    api_key=GEMINI_API_KEY
+)
+
+# Confirmed working Gemini model
+MODEL = "gemini-3.5-flash-lite"
+
+
+# ============================================================
+# STORAGE
+# ============================================================
 
 # Uploaded PDF chunks
 DOCUMENTS = []
@@ -484,9 +504,7 @@ Page: {item['page']}
 
             if remaining > 200:
 
-                source_text = source_text[
-                    :remaining
-                ]
+                source_text = source_text[:remaining]
 
                 context_parts.append(
                     source_text
@@ -641,7 +659,7 @@ def health():
 
         "status": "ok",
 
-        "ai": "Ollama",
+        "ai": "Gemini",
 
         "model": MODEL,
 
@@ -799,7 +817,6 @@ def upload():
             }), 400
 
         added_chunks = 0
-
         extracted_characters = 0
 
         # ---------------------------------------------
@@ -993,13 +1010,7 @@ def ask():
         retrieved = []
 
         # ----------------------------------------------------
-        # SPECIAL CASE:
         # SUMMARIZE + PDF
-        #
-        # This is the important fix.
-        #
-        # Instead of searching for the word "summarize",
-        # use the actual uploaded document.
         # ----------------------------------------------------
 
         if DOCUMENTS and mode == "summarize":
@@ -1014,9 +1025,7 @@ def ask():
             )
 
         # ----------------------------------------------------
-        # If user has a PDF but retrieval found nothing,
-        # use some document content instead of pretending
-        # there is no document.
+        # FALLBACK
         # ----------------------------------------------------
 
         if DOCUMENTS and not retrieved:
@@ -1024,7 +1033,7 @@ def ask():
             retrieved = get_all_document_chunks()[:6]
 
         # ----------------------------------------------------
-        # Build context
+        # BUILD CONTEXT
         # ----------------------------------------------------
 
         document_context = build_document_context(
@@ -1135,7 +1144,6 @@ Do not mention a PDF unless the student asks about one.
 Do not say that a PDF is likely related to the topic.
 """
 
-
         # ====================================================
         # FINAL PROMPT
         # ====================================================
@@ -1177,24 +1185,11 @@ STUDENT QUESTION:
 {user_input}
 """
 
-
         # ====================================================
-        # OLLAMA
+        # GEMINI
         # ====================================================
 
-        response = ollama.chat(
-
-            model=MODEL,
-
-            messages=[
-
-                {
-
-                    "role":
-                        "system",
-
-                    "content":
-                        """
+        system_instruction = """
 You are StudyPilot AI.
 
 You are a helpful educational assistant.
@@ -1210,37 +1205,37 @@ from a document unless it appears
 in the supplied document context.
 """
 
-                },
+        full_prompt = f"""
+SYSTEM INSTRUCTIONS:
+{system_instruction}
 
-                {
+STUDYPILOT REQUEST:
+{final_prompt}
+"""
 
-                    "role":
-                        "user",
+        response = client.models.generate_content(
 
-                    "content":
-                        final_prompt
+            model=MODEL,
 
-                }
-
-            ]
+            contents=full_prompt
 
         )
-
 
         # ====================================================
         # EXTRACT ANSWER
         # ====================================================
 
-        answer = (
-            response[
-                "message"
-            ][
-                "content"
-            ]
-        )
+        answer = ""
+
+        try:
+
+            answer = response.text or ""
+
+        except Exception:
+
+            answer = ""
 
         answer = answer.strip()
-
 
         if not answer:
 
@@ -1248,7 +1243,6 @@ in the supplied document context.
                 "I could not generate an answer. "
                 "Please try again."
             )
-
 
         # ====================================================
         # SAVE HISTORY
@@ -1258,7 +1252,6 @@ in the supplied document context.
             user_input,
             answer
         )
-
 
         # ====================================================
         # SEND RESPONSE
@@ -1279,13 +1272,12 @@ in the supplied document context.
                 False,
 
             "ai":
-                "Ollama",
+                "Gemini",
 
             "model":
                 MODEL
 
         })
-
 
     except Exception as error:
 
@@ -1300,9 +1292,8 @@ in the supplied document context.
             "error":
                 (
                     "StudyPilot could not connect "
-                    "to the local AI. Make sure "
-                    "Ollama is running and the "
-                    "llama3.2:3b model is installed."
+                    "to Gemini. Please check your "
+                    "GEMINI_API_KEY and try again."
                 )
 
         }), 500
@@ -1316,9 +1307,14 @@ if __name__ == "__main__":
 
     app.run(
 
-        host="127.0.0.1",
+        host="0.0.0.0",
 
-        port=5000,
+        port=int(
+            os.getenv(
+                "PORT",
+                5000
+            )
+        ),
 
         debug=True
 
