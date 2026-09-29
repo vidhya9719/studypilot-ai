@@ -2,215 +2,881 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyPilot AI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>StudyPilot AI ✨</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 </head>
 
 <body>
 
-<header class="navbar">
-    <div class="brand">
-        <div class="brand-icon">📚</div>
-        <div>
-            <h1>StudyPilot AI</h1>
-            <p>Your peaceful study companion</p>
-        </div>
-    </div>
+    <!-- Background decoration -->
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+    <div class="background-glow glow-three"></div>
 
-    <div class="status">
-        <span class="status-dot"></span>
-        AI Study Assistant
-    </div>
-</header>
+    <div class="app-shell">
 
-<main>
+        <!-- ================================================= -->
+        <!-- SIDEBAR -->
+        <!-- ================================================= -->
 
-<section class="hero">
-    <div class="hero-sticker">🌿 ✨ 📖</div>
+        <aside class="sidebar">
 
-    <p class="welcome">WELCOME TO STUDYPILOT</p>
+            <div class="brand">
 
-    <h2>Learn smarter.<br>Understand with confidence.</h2>
+                <div class="brand-icon">
+                    🧠
+                </div>
 
-    <p class="hero-text">
-        Your peaceful AI-powered study companion for explanations,
-        notes, quizzes, answers, study plans and smart timetables.
-    </p>
-</section>
+                <div>
+                    <h1>StudyPilot</h1>
+                    <span>AI Study Space ✨</span>
+                </div>
 
-
-<section class="tools-section">
-
-    <div class="section-heading">
-        <h3>What do you want to study today?</h3>
-        <p>Choose a study mode and let StudyPilot help you.</p>
-    </div>
-
-    <div class="tools-grid">
-
-        <button class="tool-card active" data-tool="explain">
-            <span class="tool-icon">💡</span>
-            <span class="tool-title">Explain Topic</span>
-            <span class="tool-description">
-                Understand difficult concepts simply.
-            </span>
-        </button>
-
-        <button class="tool-card" data-tool="summarize">
-            <span class="tool-icon">📝</span>
-            <span class="tool-title">Summarize Notes</span>
-            <span class="tool-description">
-                Turn long notes into quick revision material.
-            </span>
-        </button>
-
-        <button class="tool-card" data-tool="quiz">
-            <span class="tool-icon">🧠</span>
-            <span class="tool-title">Generate Quiz</span>
-            <span class="tool-description">
-                Practice with AI-generated questions.
-            </span>
-        </button>
-
-        <button class="tool-card" data-tool="improve">
-            <span class="tool-icon">✍️</span>
-            <span class="tool-title">Improve Answer</span>
-            <span class="tool-description">
-                Make your academic answers clearer.
-            </span>
-        </button>
-
-        <button class="tool-card" data-tool="plan">
-            <span class="tool-icon">🌱</span>
-            <span class="tool-title">Study Plan</span>
-            <span class="tool-description">
-                Get a practical step-by-step learning plan.
-            </span>
-        </button>
-
-        <button class="tool-card" data-tool="timetable">
-            <span class="tool-icon">🗓️</span>
-            <span class="tool-title">Smart Timetable</span>
-            <span class="tool-description">
-                Build a timetable with priority topics and practice questions.
-            </span>
-        </button>
-
-    </div>
-</section>
-
-
-<section class="workspace">
-
-    <div class="workspace-header">
-        <div>
-            <p class="workspace-label">STUDY WORKSPACE</p>
-            <h3 id="workspaceTitle">Explain a Topic</h3>
-
-            <p id="workspaceDescription">
-                Enter a topic or question you want to understand.
-            </p>
-        </div>
-
-        <div class="peace-icon">🌙</div>
-    </div>
-
-
-    <div id="timetableOptions" class="timetable-options hidden">
-
-        <div class="small-input">
-            <label for="studyHours">Hours available per day</label>
-
-            <input
-                type="number"
-                id="studyHours"
-                min="0.5"
-                max="12"
-                step="0.5"
-                value="2">
-        </div>
-
-        <div class="small-input">
-            <label for="studyDays">Number of days</label>
-
-            <input
-                type="number"
-                id="studyDays"
-                min="1"
-                max="30"
-                value="3">
-        </div>
-
-    </div>
-
-
-    <div class="input-box">
-
-        <label for="userInput">Your study content</label>
-
-        <textarea
-            id="userInput"
-            maxlength="6000"
-            placeholder="Example: Explain DBMS and its important topics in simple English..."></textarea>
-
-        <div class="input-footer">
-            <span id="characterCount">0 / 6000</span>
-            <span>🌿 Study peacefully</span>
-        </div>
-
-    </div>
-
-
-    <button id="generateBtn" class="generate-button">
-        <span id="buttonIcon">✨</span>
-        <span id="buttonText">Generate Explanation</span>
-    </button>
-
-
-    <div id="errorBox" class="error-box hidden"></div>
-
-
-    <div id="loadingBox" class="loading-box hidden">
-        <div class="loader"></div>
-
-        <div>
-            <strong>StudyPilot is thinking...</strong>
-            <p>Preparing something useful for your study session.</p>
-        </div>
-    </div>
-
-
-    <div id="outputSection" class="output-section hidden">
-
-        <div class="output-header">
-
-            <div>
-                <p class="workspace-label">AI RESULT</p>
-                <h3>StudyPilot's Answer</h3>
             </div>
 
-            <button id="copyBtn" class="copy-button">
-                📋 Copy
-            </button>
 
-        </div>
+            <div class="sidebar-section">
 
-        <div id="output" class="output-content"></div>
+                <div class="section-label">
+                    STUDY TOOLS
+                </div>
+
+                <button
+                    class="mode-button active"
+                    data-mode="explain"
+                >
+                    <span class="mode-icon">💡</span>
+                    <span>Explain</span>
+                </button>
+
+                <button
+                    class="mode-button"
+                    data-mode="summarize"
+                >
+                    <span class="mode-icon">📚</span>
+                    <span>Summarize</span>
+                </button>
+
+                <button
+                    class="mode-button"
+                    data-mode="quiz"
+                >
+                    <span class="mode-icon">📝</span>
+                    <span>Quiz Me</span>
+                </button>
+
+                <button
+                    class="mode-button"
+                    data-mode="improve"
+                >
+                    <span class="mode-icon">✨</span>
+                    <span>Improve Answer</span>
+                </button>
+
+                <button
+                    class="mode-button"
+                    data-mode="plan"
+                >
+                    <span class="mode-icon">🎯</span>
+                    <span>Study Plan</span>
+                </button>
+
+                <button
+                    class="mode-button"
+                    data-mode="timetable"
+                >
+                    <span class="mode-icon">🗓️</span>
+                    <span>Timetable</span>
+                </button>
+
+                <button
+                    class="mode-button"
+                    data-mode="simple"
+                >
+                    <span class="mode-icon">🌱</span>
+                    <span>Simple Explanation</span>
+                </button>
+
+                <button
+                    class="mode-button"
+                    data-mode="keypoints"
+                >
+                    <span class="mode-icon">🔑</span>
+                    <span>Key Points</span>
+                </button>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- ADVANCED -->
+            <!-- ================================================= -->
+
+            <div class="sidebar-section advanced-sidebar">
+
+                <div class="section-label advanced-label">
+                    ✨ ADVANCED LEARNING
+                </div>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="deep_analysis"
+                >
+                    <span class="mode-icon">🔍</span>
+                    <span>Deep Analysis</span>
+                </button>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="exam_answer"
+                >
+                    <span class="mode-icon">📝</span>
+                    <span>Exam Answer</span>
+                </button>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="adaptive_quiz"
+                >
+                    <span class="mode-icon">🧠</span>
+                    <span>Adaptive Quiz</span>
+                </button>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="teach_back"
+                >
+                    <span class="mode-icon">🎓</span>
+                    <span>Teach-Back</span>
+                </button>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="weak_topics"
+                >
+                    <span class="mode-icon">📊</span>
+                    <span>Weak Topic Analysis</span>
+                </button>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="smart_revision"
+                >
+                    <span class="mode-icon">🔄</span>
+                    <span>Smart Revision</span>
+                </button>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="concept_connections"
+                >
+                    <span class="mode-icon">🕸️</span>
+                    <span>Concept Connections</span>
+                </button>
+
+                <button
+                    class="mode-button advanced-mode"
+                    data-mode="study_roadmap"
+                >
+                    <span class="mode-icon">🗺️</span>
+                    <span>Study Roadmap</span>
+                </button>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- DOCUMENTS -->
+            <!-- ================================================= -->
+
+            <div class="sidebar-bottom">
+
+                <div class="section-label">
+                    📄 YOUR MATERIAL
+                </div>
+
+                <button
+                    class="upload-button"
+                    id="uploadButton"
+                >
+                    <span>📎</span>
+                    <span>Upload PDF</span>
+                </button>
+
+                <input
+                    type="file"
+                    id="pdfInput"
+                    accept=".pdf"
+                    hidden
+                >
+
+                <div
+                    class="document-list"
+                    id="documentList"
+                >
+                </div>
+
+                <button
+                    class="clear-documents"
+                    id="clearDocuments"
+                >
+                    🗑️ Clear documents
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ================================================= -->
+        <!-- MAIN CONTENT -->
+        <!-- ================================================= -->
+
+        <main class="main-content">
+
+
+            <!-- ================================================= -->
+            <!-- TOP BAR -->
+            <!-- ================================================= -->
+
+            <header class="topbar">
+
+                <div class="mobile-brand">
+
+                    <div class="mobile-brand-icon">
+                        🧠
+                    </div>
+
+                    <strong>
+                        StudyPilot
+                    </strong>
+
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <div class="level-badge">
+                        ✨ Intermediate + Advanced
+                    </div>
+
+                    <div class="status-pill">
+                        <span class="status-dot"></span>
+                        AI Ready
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- ================================================= -->
+            <!-- HERO -->
+            <!-- ================================================= -->
+
+            <section class="hero-section">
+
+                <div class="hero-badge">
+                    ✨ YOUR PERSONAL AI STUDY COMPANION
+                </div>
+
+                <h2>
+                    Study smarter.
+                    <span>Understand deeper.</span>
+                </h2>
+
+                <p>
+                    Learn concepts, prepare for exams,
+                    revise faster and turn difficult topics
+                    into something you actually understand. 🧠
+                </p>
+
+
+                <div class="hero-mini-stats">
+
+                    <div class="mini-stat">
+                        <span>💡</span>
+                        <strong>Learn</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>🧠</span>
+                        <strong>Understand</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>🎯</span>
+                        <strong>Prepare</strong>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span>🚀</span>
+                        <strong>Improve</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- QUESTION CARD -->
+            <!-- ================================================= -->
+
+            <section class="question-card">
+
+                <div class="question-card-top">
+
+                    <div>
+
+                        <div class="small-heading">
+                            ✨ LET'S LEARN
+                        </div>
+
+                        <h3>
+                            What are you studying today?
+                        </h3>
+
+                    </div>
+
+                    <div
+                        class="current-mode"
+                        id="currentMode"
+                    >
+                        💡 Explain
+                    </div>
+
+                </div>
+
+
+                <div class="input-wrapper">
+
+                    <textarea
+                        id="questionInput"
+                        placeholder="Ask StudyPilot anything... ✨"
+                        rows="4"
+                    ></textarea>
+
+                    <div class="input-bottom">
+
+                        <span class="input-hint">
+                            Press Enter to send
+                        </span>
+
+                        <button
+                            class="send-button"
+                            id="sendButton"
+                        >
+                            <span>Send</span>
+                            <span>✨</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- QUICK ACTIONS -->
+            <!-- ================================================= -->
+
+            <section class="quick-section">
+
+                <div class="section-heading-row">
+
+                    <div>
+                        <span class="eyebrow">
+                            QUICK START
+                        </span>
+
+                        <h3>
+                            Pick a study mood ✨
+                        </h3>
+                    </div>
+
+                </div>
+
+
+                <div class="quick-grid">
+
+                    <button
+                        class="quick-card"
+                        data-mode="explain"
+                        onclick="focusQuestion('Explain this concept in simple words: ')"
+                    >
+
+                        <div class="quick-icon blue">
+                            💡
+                        </div>
+
+                        <div>
+                            <strong>Understand</strong>
+
+                            <span>
+                                Break difficult concepts down
+                            </span>
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        data-mode="summarize"
+                        onclick="focusQuestion('Summarize this topic for me: ')"
+                    >
+
+                        <div class="quick-icon purple">
+                            📚
+                        </div>
+
+                        <div>
+                            <strong>Summarize</strong>
+
+                            <span>
+                                Get the important points quickly
+                            </span>
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        data-mode="quiz"
+                        onclick="focusQuestion('Quiz me on this topic: ')"
+                    >
+
+                        <div class="quick-icon pink">
+                            📝
+                        </div>
+
+                        <div>
+                            <strong>Quiz Me</strong>
+
+                            <span>
+                                Test what you actually remember
+                            </span>
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        class="quick-card"
+                        data-mode="keypoints"
+                        onclick="focusQuestion('Give me the important exam points for: ')"
+                    >
+
+                        <div class="quick-icon gold">
+                            🔑
+                        </div>
+
+                        <div>
+                            <strong>Key Points</strong>
+
+                            <span>
+                                Revise the things that matter
+                            </span>
+                        </div>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- ADVANCED LEARNING -->
+            <!-- ================================================= -->
+
+            <section class="advanced-section">
+
+                <div class="advanced-heading">
+
+                    <div>
+
+                        <div class="advanced-eyebrow">
+                            ✨ LEVEL UP YOUR LEARNING
+                        </div>
+
+                        <h3>
+                            Advanced Study Space
+                        </h3>
+
+                        <p>
+                            Go beyond simple answers and build
+                            deeper understanding.
+                        </p>
+
+                    </div>
+
+                    <div class="advanced-sparkle">
+                        ✨
+                    </div>
+
+                </div>
+
+
+                <div class="advanced-grid">
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="deep_analysis"
+                        onclick="focusQuestion('Deeply analyze this topic: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            🔍
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Deep Analysis
+                            </h4>
+
+                            <p>
+                                Explore reasoning, relationships,
+                                examples and common mistakes.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="exam_answer"
+                        onclick="focusQuestion('Write a high-quality exam answer for: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            📝
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Exam Answer
+                            </h4>
+
+                            <p>
+                                Turn questions into structured
+                                college-ready answers.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="adaptive_quiz"
+                        onclick="focusQuestion('Start an adaptive quiz on: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            🧠
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Adaptive Quiz
+                            </h4>
+
+                            <p>
+                                Get questions that adjust to
+                                your performance.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="teach_back"
+                        onclick="focusQuestion('Help me use teach-back for: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            🎓
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Teach-Back
+                            </h4>
+
+                            <p>
+                                Explain what you know and discover
+                                what you missed.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="weak_topics"
+                        onclick="focusQuestion('Analyze my weak topics for: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            📊
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Weak Topics
+                            </h4>
+
+                            <p>
+                                Find areas that need more practice
+                                and revision.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="smart_revision"
+                        onclick="focusQuestion('Create a smart revision session for: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            🔄
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Smart Revision
+                            </h4>
+
+                            <p>
+                                Focus your revision on the most
+                                important information.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="concept_connections"
+                        onclick="focusQuestion('Show me the connections between concepts in: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            🕸️
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Concept Connections
+                            </h4>
+
+                            <p>
+                                Build a mental map of related
+                                concepts and ideas.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="advanced-card"
+                        data-mode="study_roadmap"
+                        onclick="focusQuestion('Create a study roadmap for: ')"
+                    >
+
+                        <div class="advanced-card-icon">
+                            🗺️
+                        </div>
+
+                        <div class="advanced-card-content">
+
+                            <h4>
+                                Study Roadmap
+                            </h4>
+
+                            <p>
+                                Learn from prerequisites to
+                                advanced applications.
+                            </p>
+
+                        </div>
+
+                        <span class="card-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- CHAT / ANSWER AREA -->
+            <!-- ================================================= -->
+
+            <section class="answer-section">
+
+                <div class="answer-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            🧠 STUDYPILOT
+                        </span>
+
+                        <h3>
+                            Your learning results
+                        </h3>
+
+                    </div>
+
+                    <div class="ai-status">
+                        <span class="status-dot"></span>
+                        Ollama AI
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="chat-container"
+                    id="chatContainer"
+                >
+
+                    <div class="welcome-message">
+
+                        <div class="welcome-icon">
+                            ✨
+                        </div>
+
+                        <h3>
+                            Your study space is ready
+                        </h3>
+
+                        <p>
+                            Ask a question, upload a PDF,
+                            or choose a study mode above.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- FOOTER -->
+            <!-- ================================================= -->
+
+            <footer class="footer">
+
+                <span>
+                    Made for students who want to learn smarter ✨
+                </span>
+
+                <span>
+                    StudyPilot AI • Local AI Powered
+                </span>
+
+            </footer>
+
+        </main>
 
     </div>
 
-</section>
 
+    <!-- ===================================================== -->
+    <!-- SCRIPT -->
+    <!-- ===================================================== -->
 
-<footer>
-    <div>📚 StudyPilot AI</div>
-    <p>Learn • Practice • Revise • Improve</p>
-</footer>
-
-</main>
-
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+    ></script>
 
 </body>
 </html>
