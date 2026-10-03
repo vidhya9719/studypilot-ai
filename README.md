@@ -1,104 +1,156 @@
-# StudyPilot AI
+# 📚 StudyPilot AI
 
-StudyPilot AI is a Flask-based study assistant that uses Google Gemini to answer questions, explain topics, generate study materials, and answer questions using text extracted from uploaded PDFs.
+> Study smarter. Understand better. Learn with AI. ✨
 
-## Table of Contents
+StudyPilot AI is an AI-powered study assistant designed to help students understand concepts, summarize material, generate quizzes, improve answers, prepare for exams, revise topics, identify areas for practice, create study plans, and learn from uploaded PDF documents.
 
-1. [Problem Statement](#problem-statement)
-2. [Solution](#solution)
-3. [Features](#features)
-4. [Study Modes](#study-modes)
-5. [How Questions and AI Solutions Work](#how-questions-and-ai-solutions-work)
-6. [PDF Upload and Document Retrieval](#pdf-upload-and-document-retrieval)
-7. [Technology Stack](#technology-stack)
-8. [Project Structure](#project-structure)
-9. [Installation](#installation)
-10. [Environment Variables](#environment-variables)
-11. [How to Run](#how-to-run)
-12. [How to Use](#how-to-use)
-13. [Example Questions and Solutions](#example-questions-and-solutions)
-14. [Deployment](#deployment)
-15. [Future Enhancements](#future-enhancements)
-16. [Author](#author)
+It brings learning tools for explanations, summaries, quizzes, revision, document learning, and planning together in one platform, powered by Google Gemini.
 
-## Problem Statement
+## 🚀 Live Demo
 
-Students often need to switch between different resources to understand concepts, revise material, prepare for exams, and find answers in their study documents.
+**🌐 Live Website:**  
+https://studypilot-ai.onrender.com
 
-## Solution
+**💻 GitHub Repository:**  
+https://github.com/vidhya9719/studypilot-ai
 
-StudyPilot AI provides a single study assistant powered by Gemini. Students can ask questions using different study modes and upload text-based PDFs for document-aware answers.
+## 🎯 What is StudyPilot AI?
 
-## Features
+StudyPilot AI is a web-based study assistant for students. It provides different prompt-based learning modes for tasks such as understanding a topic, practicing questions, revising material, improving answers, and planning study sessions.
 
-- AI-generated study responses using Google Gemini.
-- Study modes for explanations, summaries, quizzes, revision, and planning.
-- Adjustable response styles, from beginner-friendly to advanced.
-- PDF text extraction and question-relevant document retrieval.
-- Responses that include source filenames and page numbers when PDF context is used.
-- Recent conversation context, stored in application memory.
-- Document listing and clearing endpoints.
-- PDF upload limit of 15 MB.
+Students can also upload text-based PDFs and ask questions using their study material. These task-specific modes make StudyPilot AI more than a basic chatbot: the selected mode provides Gemini with instructions suited to the learning task.
 
-PDFs must contain extractable text. Scanned or image-only PDFs are not processed with OCR.
+## 💡 Problem Statement
 
-## Study Modes
+Students may find it challenging to:
 
-StudyPilot AI currently defines these modes:
+- Understand difficult concepts.
+- Work through large amounts of study material.
+- Identify important points for revision.
+- Keep revision structured.
+- Explain concepts clearly in their own words.
+- Prepare exam-ready answers.
+- Identify areas that may need more practice.
+- Search large PDF notes manually.
+- Manage different study tasks across multiple tools.
 
-- `explain` — explains a topic step by step, with an example and summary.
-- `summarize` — summarizes provided material or an uploaded PDF.
-- `quiz` — creates five questions with answers and explanations.
-- `improve` — reviews and improves a student's answer.
-- `plan` — creates a practical study plan.
-- `timetable` — organizes study into focused sessions and breaks.
-- `simple` — explains a topic in beginner-friendly language.
-- `keypoints` — extracts important exam revision points.
-- `deep_analysis` — provides a structured, in-depth topic analysis.
-- `exam_answer` — formats a response as a college exam answer.
-- `adaptive_quiz` — prompts Gemini to adjust quiz difficulty based on the student's responses and conversation context.
-- `teach_back` — prompts Gemini to evaluate a student's explanation and ask a follow-up question.
-- `weak_topics` — prompts Gemini to identify possible areas for practice based on available context.
-- `smart_revision` — creates a focused revision session.
-- `concept_connections` — explains relationships between concepts.
-- `study_roadmap` — organizes learning from prerequisites through revision.
+StudyPilot AI brings these learning tasks into one study-focused platform.
 
-These are prompt-based modes sent to Gemini; they are not separate AI models.
+## ✨ Solution
 
-## How Questions and AI Solutions Work
+Students select a study mode, enter a topic or question, and can upload a PDF for document-based learning. When relevant, StudyPilot retrieves document text and includes it as context in a prompt sent to Gemini.
 
-1. The `/ask` endpoint receives a question, study mode, and answer style.
-2. StudyPilot selects relevant PDF text when documents are available and builds a prompt with the question, mode instructions, answer style, recent conversation, and document context.
-3. The prompt is sent to the configured Gemini model.
-4. The generated answer and any document sources are returned as JSON.
-5. The question and answer are added to in-memory conversation history, which retains up to ten messages.
+```text
+Student → Study Mode → Question/PDF → Document Retrieval when needed → Google Gemini → Learning Response
+```
 
-When no PDF is available, Gemini is instructed to answer using general knowledge.
+## 🧠 Key Features
 
-## PDF Upload and Document Retrieval
+| Feature | Description |
+|---|---|
+| Explain | Provides a step-by-step explanation of a topic. |
+| Summarize | Summarizes a topic or provided study material. |
+| Quiz | Generates five questions with answers and explanations. |
+| Improve | Reviews and improves a student's answer. |
+| Plan | Creates a practical study plan for a topic. |
+| Timetable | Organizes study into focused sessions with breaks. |
+| Simple | Explains a topic in beginner-friendly language. |
+| Key Points | Extracts important points for revision. |
+| PDF Learning | Retrieves relevant text from uploaded PDFs for question context. |
+| Deep Analysis | Gives a structured analysis of a topic and related concepts. |
+| Exam Answer | Structures a response in an exam-answer format. |
+| Adaptive Quiz | Prompts Gemini to adjust quiz difficulty based on responses and context. |
+| Teach-Back | Prompts Gemini to review a student's explanation and ask a follow-up question. |
+| Weak Topic Analysis | Prompts Gemini to suggest potential areas for practice from available context. |
+| Smart Revision | Creates a focused revision session with key concepts and a self-test. |
+| Concept Connections | Explains relationships between concepts. |
+| Study Roadmap | Organizes learning from prerequisites through revision. |
 
-1. A PDF is uploaded to the `/upload` endpoint.
-2. StudyPilot extracts text page by page using `pypdf`.
-3. Text is cleaned and split into overlapping chunks of 1,600 characters, with 250 characters of overlap.
-4. For a question, TF-IDF vectorization and cosine similarity rank relevant chunks. Up to six chunks are selected.
-5. Selected text is included in the Gemini prompt. Responses return source filenames and page numbers.
+These modes guide Gemini with task-specific prompts; they are not separate AI models.
 
-For `summarize` mode, all stored chunks are selected before the document context is limited to 14,000 characters. If retrieval returns no results while documents are loaded, the application falls back to the first six chunks.
+## 📚 Study Modes
 
-Uploaded documents and conversation history are stored in memory. They are lost when the application process restarts and are not shared between separate application workers.
+### 🌱 Core Study Modes
 
-## Technology Stack
+| Mode | Purpose |
+|---|---|
+| Explain | Explain a topic step by step. |
+| Summarize | Summarize provided material or a topic. |
+| Quiz | Create questions with answers and explanations. |
+| Improve | Review and improve a student's answer. |
+| Plan | Create a practical study plan. |
+| Timetable | Arrange study sessions and breaks. |
+| Simple | Explain a topic in beginner-friendly language. |
+| Key Points | Extract important revision points. |
 
-- Python
-- Flask 3.1.3
-- Google Gemini API through `google-genai` 2.25.0
-- `pypdf` 6.19.0 for PDF text extraction
-- scikit-learn 1.9.1 for TF-IDF and cosine similarity
-- NumPy 2.5.3
-- `python-dotenv` 1.2.3
-- Gunicorn 23.0.0 for deployment
+### 🚀 Advanced Study Modes
 
-## Project Structure
+| Mode | Purpose |
+|---|---|
+| Deep Analysis | Explore a topic, its sub-concepts, and common misconceptions. |
+| Exam Answer | Structure a response for an exam. |
+| Adaptive Quiz | Prompt Gemini to adjust quiz difficulty based on responses. |
+| Teach-Back | Review a student's explanation and identify possible gaps. |
+| Weak Topic Analysis | Suggest possible areas for practice based on available context. |
+| Smart Revision | Create a focused revision session. |
+| Concept Connections | Explain how related concepts connect. |
+| Study Roadmap | Arrange learning stages from prerequisites to revision. |
+
+## 📄 PDF Learning
+
+Students can upload their own study PDFs and ask questions about their contents. StudyPilot uses PyPDF to extract page text, splits it into overlapping chunks, and uses TF-IDF retrieval with Scikit-learn to select relevant text for the Gemini prompt.
+
+```text
+Upload PDF → Extract Text → Chunk Text → TF-IDF Retrieval → Relevant Context → Gemini → Response
+```
+
+This can help students work with class notes, subject material, revision notes, and other study PDFs.
+
+**Current limitations:**
+
+- Text-based PDFs are supported.
+- Scanned or image-only PDFs are not supported because OCR is not implemented.
+- Uploaded documents are stored in application memory.
+- Documents may need to be uploaded again after a server restart or redeployment.
+- The application limits PDF uploads to 15 MB.
+
+## 🔍 How It Works
+
+The selected study mode determines the instructions included in the prompt sent to Gemini.
+
+### Normal Questions
+
+```text
+User → Study Mode → Prompt → Gemini → Response
+```
+
+### PDF-Based Questions
+
+```text
+User + PDF → Text Extraction → Chunking → TF-IDF → Context → Gemini → Response
+```
+
+StudyPilot uses TF-IDF and cosine similarity for document retrieval. Uploaded documents and recent conversation history are held in application memory.
+
+## 🛠️ Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Application programming language. |
+| Flask | Backend web framework and API routes. |
+| Google Gemini API | Generates AI learning responses. |
+| HTML | Web page structure. |
+| CSS | Web page styling. |
+| JavaScript | Frontend interactions. |
+| PyPDF | Extracts text from PDFs. |
+| Scikit-learn | Provides TF-IDF and cosine-similarity retrieval. |
+| TF-IDF | Helps rank PDF text chunks for a question. |
+| Gunicorn | Production WSGI server. |
+| Render | Application hosting and deployment. |
+
+The configured Gemini model is `gemini-3.5-flash-lite`.
+
+## 📁 Project Structure
 
 ```text
 STUDYPILOT-AI/
@@ -110,126 +162,155 @@ STUDYPILOT-AI/
 ├── app.py
 ├── requirements.txt
 ├── .env
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
-The `.env` file contains private configuration and must not be committed to GitHub.
+- `app.py` — Flask application, Gemini integration, and API routes.
+- `templates/index.html` — main page template.
+- `static/script.js` — frontend JavaScript.
+- `static/style.css` — page styling.
+- `requirements.txt` — Python dependencies.
+- `.env` — private local environment variables. **Never commit this file or expose its contents.**
+- `.gitignore` — specifies files Git should ignore.
+- `README.md` — project documentation.
 
-## Installation
+## ⚙️ Installation
 
-1. Install Python.
-2. Open a terminal in the project root.
-3. Create and activate a virtual environment:
+Clone the repository and open its project directory:
 
-   **Windows PowerShell**
+```bash
+git clone https://github.com/vidhya9719/studypilot-ai.git
+cd studypilot-ai
+```
 
-       python -m venv .venv
-       .\.venv\Scripts\Activate.ps1
+Create and activate a virtual environment on Windows:
 
-4. Install the dependencies:
+```powershell
+python -m venv venv
+venv\Scripts\activate
+```
 
-       pip install -r requirements.txt
+Install the dependencies:
 
-The pinned dependencies are:
+```bash
+pip install -r requirements.txt
+```
 
-- Flask==3.1.3
-- Werkzeug==3.1.8
-- google-genai==2.25.0
-- python-dotenv==1.2.3
-- pypdf==6.19.0
-- scikit-learn==1.9.1
-- numpy==2.5.3
-- gunicorn==23.0.0
+Create a root-level `.env` file for local development:
 
-## Environment Variables
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-Set the following environment variables for the application:
+Use your own key. Keep `.env` private and do not commit it to GitHub.
 
-- `GEMINI_API_KEY` — your private Google Gemini API key.
-- `PORT` — optional port number; defaults to `5000`.
+## ▶️ Run Locally
 
-For local development, place them in a root-level `.env` file:
+With the virtual environment activated and `.env` configured, run:
 
-    GEMINI_API_KEY=your_gemini_api_key
-    PORT=5000
+```bash
+python app.py
+```
 
-Keep `.env` private. Do not commit it to GitHub or include your API key in source code, documentation, or public deployment logs. Configure `GEMINI_API_KEY` as a private environment variable in Render.
+Open:
 
-## How to Run
+```text
+http://127.0.0.1:5000
+```
 
-With the virtual environment activated and environment variables configured, run:
+## 📖 How to Use
 
-    python app.py
+1. Open the website.
+2. Select a study mode.
+3. Enter a question or topic.
+4. Upload a PDF if you want to use your own study material.
+5. Submit your request.
+6. Read the generated response.
+7. Try other modes for practice or revision.
 
-The application listens on `0.0.0.0` and uses port `5000` by default. Open `http://127.0.0.1:5000` in your browser.
+Example requests:
 
-## How to Use
+- “Explain photosynthesis in simple language.”
+- “Create a quiz about cell structure.”
+- “Improve my answer about the causes of climate change.”
+- Upload a text-based PDF and ask, “Summarize the main ideas in this document.”
 
-1. Open the application in your browser.
-2. Enter a question or topic.
-3. Select a study mode and answer style if those controls are available in the interface.
-4. Upload a text-based PDF to ask questions about its contents.
-5. To manage documents through the API:
-   - `GET /documents` lists uploaded filenames and pages.
-   - `POST /clear-documents` clears stored documents.
-   - `GET /health` returns application health, AI name, model, and document count.
+Responses are generated by Gemini and may vary.
 
-The `/ask` endpoint accepts JSON with `message`, `mode`, and `style` fields. For example:
+## 🔌 API Endpoints
 
-    {
-      "message": "Explain photosynthesis",
-      "mode": "simple",
-      "style": "beginner"
-    }
+The Flask application provides these routes:
 
-The `/upload` endpoint accepts a PDF as a multipart form field named `file`.
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/` | Serves the main page. |
+| `GET` | `/health` | Returns application health information. |
+| `POST` | `/ask` | Sends a question, study mode, and answer style for an AI response. |
+| `POST` | `/upload` | Uploads and processes a PDF. |
+| `GET` | `/documents` | Lists uploaded document information. |
+| `POST` | `/clear-documents` | Clears documents stored in application memory. |
 
-## Example Questions and Solutions
+## ☁️ Deployment
 
-These are example requests. Gemini's responses will vary.
+StudyPilot AI is deployed on Render using Gunicorn.
 
-**Question:** “Explain photosynthesis in simple language.”  
-**Mode:** `simple`  
-**Expected response:** A beginner-friendly explanation with a simple example.
+**Build command:**
 
-**Question:** “Create a quiz about cell structure.”  
-**Mode:** `quiz`  
-**Expected response:** Five easy-to-medium questions, followed by answers and short explanations.
+```bash
+pip install -r requirements.txt
+```
 
-**Question about an uploaded PDF:** “Summarize the main ideas in this document.”  
-**Mode:** `summarize`  
-**Expected response:** A summary based on the supplied PDF text, with available document sources returned by the API.
+**Start command:**
 
-## Deployment
+```bash
+gunicorn app:app
+```
 
-StudyPilot AI is deployed using Render and Gunicorn.
+Configure `GEMINI_API_KEY` as a private environment variable in the Render service. Do not commit `.env` or put a real API key in the repository.
 
-For a Render web service:
+Live deployment:
 
-1. Connect the project repository.
-2. Set the build command to:
+https://studypilot-ai.onrender.com
 
-       pip install -r requirements.txt
+## ⚠️ Current Limitations
 
-3. Set the start command to:
+- OCR is not implemented, so scanned or image-only PDFs are not supported.
+- PDF documents are stored in application memory.
+- Documents may need to be uploaded again after a restart or redeployment.
+- Gemini availability and usage limits can affect responses.
 
-       gunicorn app:app
+## 🔮 Future Enhancements
 
-4. Add `GEMINI_API_KEY` in the Render service's environment variables. Do not commit the `.env` file or add it to the repository.
-5. Deploy the service.
+- Persistent document storage.
+- OCR support for scanned documents.
+- User accounts.
+- Personalized study history.
+- Progress tracking and performance analytics.
+- Spaced repetition.
+- Weak-topic visualization.
+- Support for more document formats.
+- Personalized learning recommendations.
 
-The Flask application reads the `PORT` environment variable when started directly. Gunicorn and Render manage the production web process and port configuration.
+## 🎓 Project Goal
 
-The application currently runs with `debug=True` when started directly with `python app.py`. Use Gunicorn for deployment rather than the Flask development server.
+StudyPilot AI demonstrates practical use of generative AI, prompt engineering, document processing, information retrieval, Flask, frontend development, and web application deployment.
 
-## Future Enhancements
+## 💙 Why StudyPilot AI?
 
-- Persist documents and conversation history between restarts.
-- Add user sessions and isolate each user's documents and history.
-- Add OCR support for scanned PDFs.
-- Add automated tests and additional production monitoring.
-- Improve retrieval for large document collections.
+The goal is to make studying more structured by bringing understanding, practice, revision, document learning, and planning together in one place.
 
-## Author
+> Learn with purpose. Revise with confidence. Grow with every concept. ✨
 
-vidhya9719
+## 👩‍💻 Author
+
+**Vidhya**
+
+**GitHub:**  
+https://github.com/vidhya9719
+
+**Repository:**  
+https://github.com/vidhya9719/studypilot-ai
+
+**Live Demo:**  
+https://studypilot-ai.onrender.com
